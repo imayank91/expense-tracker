@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ExpenseTracker</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="choose_date">Choose date</string>
+    <string name="ok">Ok</string>
+    <string name="amount">Amount</string>
+    <string name="dollar">$</string>
+    <string name="title">Title</string>
+    <string name="transaction_type">Transaction Type</string>
+    <string name="add_transaction">Add Transaction</string>
+</resources>
