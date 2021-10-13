@@ -18,12 +18,6 @@ ext {
 
     // JUnit
     junit_version = '4.13.2'
-    mockito_core_version = '1.10.19'
-    mockito_kotlin_version = '3.2.0'
-    mockito_inline_version = '3.10.0'
-    arch_core_testing = '2.0.1'
-    pact_version = '4.1.17'
-    kotlinx_coroutines_test = '1.5.0'
 
     //corourines
     coroutines_version = '1.5.0'
@@ -34,10 +28,11 @@ ext {
     //navigation-compose
     navigation_compose_version = '2.4.0-alpha04'
 
-    turbine_version = '0.5.2'
-
     //Room
     room_version = '2.3.0'
+
+    //Material DateTime
+    compose_date_time = '0.6.1'
 
     GradleDeps = [
             androidPlugin: "com.android.tools.build:gradle:$android_gradle_version",
@@ -46,8 +41,7 @@ ext {
 
     KotlinLib = [
             stdlib: "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version",
-            coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version",
-            coroutinesTest: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+            coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     ]
 
     AndroidX = [
@@ -68,13 +62,7 @@ ext {
     ]
 
     UnitTest = [
-            junit: "junit:junit:$junit_version",
-            mockitoCore: "org.mockito:mockito-core:$mockito_core_version",
-            mockitoKotlin: "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version",
-            mockitoInline: "org.mockito:mockito-inline:$mockito_inline_version",
-            archCoreTesting: "androidx.arch.core:core-testing:$arch_core_testing",
-            coroutineTest : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinx_coroutines_test",
-            turbine: "app.cash.turbine:turbine:$turbine_version"
+            junit: "junit:junit:$junit_version"
     ]
 
     AndroidXTest = [
@@ -93,6 +81,7 @@ ext {
             animation: "androidx.compose.animation:animation:$compose_version",
             uiTooling: "androidx.compose.ui:ui-tooling:$compose_version",
             runtimeLivedata: "androidx.compose.runtime:runtime-livedata:$compose_version",
-            navigation:"androidx.navigation:navigation-compose:$navigation_compose_version"
+            navigation:"androidx.navigation:navigation-compose:$navigation_compose_version",
+            dateTime:"io.github.vanpra.compose-material-dialogs:datetime:$compose_date_time"
     ]
 }

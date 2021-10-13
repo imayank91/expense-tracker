@@ -64,13 +64,8 @@ dependencies {
     implementation AndroidX.room
     implementation AndroidX.roomKTX
     kapt AndroidX.roomAP
-    implementation "io.github.vanpra.compose-material-dialogs:datetime:0.6.1"
+    implementation JetpackCompose.dateTime
     testImplementation UnitTest.junit
-    testImplementation UnitTest.mockitoCore
     androidTestImplementation AndroidXTest.junit
     androidTestImplementation AndroidXTest.espressoCore
-    testImplementation UnitTest.mockitoKotlin
-    testImplementation UnitTest.coroutineTest
-    testImplementation UnitTest.mockitoInline
-    testImplementation UnitTest.turbine
 }
