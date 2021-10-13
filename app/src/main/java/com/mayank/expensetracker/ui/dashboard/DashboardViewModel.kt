@@ -1,10 +1,10 @@
 package com.mayank.expensetracker.ui.dashboard
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayank.expensetracker.internal.model.Transaction
 import com.mayank.expensetracker.internal.usecase.AddTransactionUseCase
+import com.mayank.expensetracker.internal.usecase.DeleteTransactionsUseCase
 import com.mayank.expensetracker.internal.usecase.GetTransactionsUseCase
 import com.mayank.expensetracker.internal.utils.InputValidator
 import com.mayank.expensetracker.internal.utils.TransactionType
@@ -15,13 +15,13 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.temporal.TemporalQueries.localDate
 import javax.inject.Inject
 
 
 internal class DashboardViewModel @Inject constructor(
     private val getTransactionsUseCase: GetTransactionsUseCase,
     private val addTransactionUseCase: AddTransactionUseCase,
+    private val deleteTransactionsUseCase: DeleteTransactionsUseCase,
     private val transactionsUIStateMapper: TransactionsUIStateMapper,
 ) : ViewModel() {
     private val typeList = listOf(TransactionType.Expense.name, TransactionType.Income.name)
@@ -29,17 +29,14 @@ internal class DashboardViewModel @Inject constructor(
         MutableStateFlow(DashboardScreenViewState.Empty)
     val viewState: StateFlow<DashboardScreenViewState> = _dashboardViewState.asStateFlow()
 
-    private val _addTransaction =
-        MutableStateFlow(
-            AddTransactionState(title = "",
-                amount = "",
-                type = "",
-                date = LocalDate.now(),
-                formattedDate = "",
-                typeList = typeList,
-                saveEnabled = false
-            )
-        )
+    private val _addTransaction = MutableStateFlow(AddTransactionState(title = "",
+        amount = "",
+        type = "",
+        date = LocalDate.now(),
+        formattedDate = "",
+        typeList = typeList,
+        saveEnabled = false
+    ))
     val addTransactionState: StateFlow<AddTransactionState> get() = _addTransaction.asStateFlow()
 
     private var title = MutableStateFlow("")
@@ -53,6 +50,14 @@ internal class DashboardViewModel @Inject constructor(
         observeAddTransactionState()
     }
 
+    private fun resetAddTransaction() {
+        title.value = ""
+        amount.value = ""
+        type.value = ""
+        date.value = LocalDate.now()
+        formattedDate.value = ""
+    }
+
     private fun observeAddTransactionState() {
         viewModelScope.launch {
             combine(title,
@@ -60,7 +65,8 @@ internal class DashboardViewModel @Inject constructor(
                 date,
                 formattedDate,
                 type) { title, amount, date, formattedDate, type ->
-                AddTransactionState(title = title,
+                AddTransactionState(
+                    title = title,
                     amount = amount,
                     type = type,
                     date = date,
@@ -79,11 +85,24 @@ internal class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             getTransactionsUseCase.getTransactions().catch {
 
-            }.collect {
-                _dashboardViewState.value =
-                    DashboardScreenViewState.Success(DashboardScreenState(transactionsUIStateMapper.map(
-                        it)))
-                Log.d("test", "test")
+            }.collect { transaction ->
+                when {
+                    transaction.isNotEmpty() -> {
+                        val (totalIncome, totalExpense) = transaction.partition { it.transactionType == TransactionType.Income.name }
+                        val income = totalIncome.sumOf { it.amount }
+                        val expense = totalExpense.sumOf { it.amount }
+                        val balance = income - expense
+                        _dashboardViewState.value =
+                            DashboardScreenViewState.Success(DashboardScreenState(balance = balance,
+                                income = income,
+                                expense = expense,
+                                transactions = transactionsUIStateMapper.map(
+                                    transaction)))
+                    }
+                    transaction.isEmpty() -> {
+                        _dashboardViewState.value = DashboardScreenViewState.Empty
+                    }
+                }
             }
         }
     }
@@ -119,6 +138,14 @@ internal class DashboardViewModel @Inject constructor(
                 addTransactionUseCase.addTransaction(transaction)
                 getTransactionsUseCase.getTransactions()
             }
+        }
+        resetAddTransaction()
+    }
+
+    fun deleteTransaction(id: Int) {
+        viewModelScope.launch {
+            deleteTransactionsUseCase.deleteTransaction(id)
+            getTransactionsUseCase.getTransactions()
         }
     }
 

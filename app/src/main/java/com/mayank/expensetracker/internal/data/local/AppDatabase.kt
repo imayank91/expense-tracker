@@ -11,7 +11,7 @@ import com.mayank.expensetracker.internal.model.Transaction
     version = 1,
     exportSchema = false
 )
-abstract class AppDatabase : RoomDatabase() {
+internal abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getTransactionDao(): TransactionDao
 
@@ -20,9 +20,7 @@ abstract class AppDatabase : RoomDatabase() {
         private var instance: AppDatabase? = null
         private val LOCK = Any()
 
-        // Check for DB instance if not null then get or insert or else create new DB Instance
         operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
-
             instance ?: createDatabase(context).also { instance = it }
         }
 

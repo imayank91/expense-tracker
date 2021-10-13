@@ -1,5 +1,6 @@
 package com.mayank.expensetracker.ui.dashboard
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,13 +28,21 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 
-@OptIn(ExperimentalComposeUiApi::class,
-    androidx.compose.foundation.ExperimentalFoundationApi::class)
+@ExperimentalFoundationApi
+@ExperimentalComposeUiApi
 @Composable
 internal fun AddTransactionBody(vm: DashboardViewModel, onCancel: () -> Unit, onSave: () -> Unit) {
     val transaction by vm.addTransactionState.collectAsState()
     var expanded by remember { mutableStateOf(false) }
     val transactionList = transaction.typeList
+    var titleValue by remember {
+        mutableStateOf(TextFieldValue(transaction.title,
+            TextRange(transaction.title.length)))
+    }
+    var amountValue by remember {
+        mutableStateOf(TextFieldValue(transaction.amount,
+            TextRange(transaction.amount.length)))
+    }
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -93,14 +102,10 @@ internal fun AddTransactionBody(vm: DashboardViewModel, onCancel: () -> Unit, on
         }
         val (focusRequester) = FocusRequester.createRefs()
         item {
-            val fieldValue = remember {
-                mutableStateOf(TextFieldValue(transaction.title,
-                    TextRange(transaction.title.length)))
-            }
             ExpenseTrackerInputText(
-                textFieldValue = fieldValue.value,
+                textFieldValue = titleValue,
                 onTextChanged = {
-                    fieldValue.value = it
+                    titleValue = it
                     vm.setTitle(it.text)
                 },
                 placeholder = {
@@ -116,14 +121,10 @@ internal fun AddTransactionBody(vm: DashboardViewModel, onCancel: () -> Unit, on
             )
         }
         item {
-            val fieldValue = remember {
-                mutableStateOf(TextFieldValue(transaction.amount,
-                    TextRange(transaction.amount.length)))
-            }
             ExpenseTrackerInputText(
-                textFieldValue = fieldValue.value,
+                textFieldValue = amountValue,
                 onTextChanged = {
-                    fieldValue.value = it
+                    amountValue = it
                     vm.setAmount(it.text)
                 },
                 placeholder = {
@@ -140,7 +141,7 @@ internal fun AddTransactionBody(vm: DashboardViewModel, onCancel: () -> Unit, on
                 },
                 focusRequester = focusRequester,
                 focusState = false,
-                imeAction = ImeAction.Next,
+                imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Number,
             )
         }
@@ -195,7 +196,11 @@ internal fun AddTransactionBody(vm: DashboardViewModel, onCancel: () -> Unit, on
                     modifier = Modifier.weight(1f),
                     enabled = transaction.saveEnabled,
                     buttonText = stringResource(R.string.save),
-                    onButtonClick = onSave
+                    onButtonClick = {
+                        amountValue = TextFieldValue()
+                        titleValue = TextFieldValue()
+                        onSave()
+                    }
                 )
             }
         }

@@ -1,10 +1,7 @@
 package com.mayank.expensetracker.internal.di
 
 import com.mayank.expensetracker.internal.repo.TransactionRepo
-import com.mayank.expensetracker.internal.usecase.AddTransactionUseCase
-import com.mayank.expensetracker.internal.usecase.AddTransactionUseCaseImpl
-import com.mayank.expensetracker.internal.usecase.GetTransactionsUseCase
-import com.mayank.expensetracker.internal.usecase.GetTransferUseCaseImpl
+import com.mayank.expensetracker.internal.usecase.*
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -22,5 +19,11 @@ internal class UseCaseModule {
     @Provides
     fun provideAddTransactionUseCase(repo: TransactionRepo): AddTransactionUseCase {
         return AddTransactionUseCaseImpl(repo)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteTransactionUseCase(repo: TransactionRepo): DeleteTransactionsUseCase {
+        return DeleteTransactionsUseCaseImpl(repo)
     }
 }

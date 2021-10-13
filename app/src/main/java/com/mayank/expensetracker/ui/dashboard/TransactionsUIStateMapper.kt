@@ -34,6 +34,7 @@ internal class TransactionsUIStateMapperImpl @Inject constructor(
 
     private fun getBalanceTransactionState(transaction: Transaction) =
         BalanceTransactionState(
+            transactionId = transaction.transactionId,
             description = transaction.title,
             amount = transaction.amount.toTransactionAmount(transaction.transactionType.isCredit()),
             isCredit = transaction.transactionType.isCredit()

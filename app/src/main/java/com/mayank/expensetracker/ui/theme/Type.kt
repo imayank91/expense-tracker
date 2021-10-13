@@ -10,7 +10,6 @@ import com.mayank.expensetracker.R
 
 val fonts = FontFamily(
     Font(R.font.poppins, FontWeight.Normal),
-    //Font(R.font.poppins, FontWeight.Medium),
     Font(R.font.poppins_semibold, FontWeight.SemiBold),
 )
 

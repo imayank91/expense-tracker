@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
+import kotlin.math.abs
 
 fun LocalDate.formatDate() =
     "${
@@ -21,14 +22,14 @@ fun Date.toDateString(): String {
     return SimpleDateFormat("dd MMMM yyyy").format(this)
 }
 
-@SuppressLint("SimpleDateFormat")
-fun Date.toMonth(): String {
-    return SimpleDateFormat("MMMM").format(this)
+fun Double.toDollars(): String {
+    val prefix = if (this < 0) "-$" else "$"
+    return "$prefix${"%.2f".format(abs(this)).toDouble()}"
 }
 
-fun String.isCredit() : Boolean = equals(TransactionType.Income.name, true)
+fun String.isCredit(): Boolean = equals(TransactionType.Income.name, true)
 
-enum class TransactionType{
+enum class TransactionType {
     Expense,
     Income
 }

@@ -42,8 +42,6 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    //ExpenseScreen()
-                    //Greeting("Android")
                     ExpenseFlow(vmFactory)
                 }
             }
@@ -60,17 +58,4 @@ class MainActivity : ComponentActivity() {
 fun ExpenseFlow(vmFactory: ViewModelProvider.Factory) {
     val navController = rememberNavController()
     AppNavHost(navController = navController, vmFactory = vmFactory)
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ExpenseTrackerTheme {
-        Greeting("Android")
-    }
 }

@@ -3,8 +3,6 @@ package com.mayank.expensetracker.internal.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.Serializable
-import java.text.DateFormat
 
 @Entity(tableName = "all_transactions")
 data class Transaction(
@@ -17,15 +15,8 @@ data class Transaction(
     @ColumnInfo(name = "transactionDate")
     var transactionDate: String,
     @ColumnInfo(name = "createdAt")
-    var timestamp: Long ,
+    var timestamp: Long,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "transactionId")
     var transactionId: Int = 0,
-) {
-}
-
-//    : Serializable {
-//    val createdAtDateFormat: String
-//        get() = DateFormat.getDateTimeInstance()
-//            .format(createdAt) // Date Format: Jan 11, 2021, 11:30 AM
-//}
+)
