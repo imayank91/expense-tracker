@@ -16,11 +16,8 @@ data class Transaction(
     var transactionType: String,
     @ColumnInfo(name = "transactionDate")
     var transactionDate: String,
-    @ColumnInfo(name = "note")
-    var note: String,
     @ColumnInfo(name = "createdAt")
-    var createdAt: Long =
-        System.currentTimeMillis(),
+    var timestamp: Long ,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "transactionId")
     var transactionId: Int = 0,

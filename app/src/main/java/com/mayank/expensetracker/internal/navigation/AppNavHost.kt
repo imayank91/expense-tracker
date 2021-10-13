@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,6 +25,7 @@ import com.mayank.expensetracker.ui.dashboard.ExpenseScreen
 internal fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    vmFactory: ViewModelProvider.Factory,
     startDestination: String = AppRoutes.Dashboard,
 ) {
     NavHost(
@@ -31,8 +34,14 @@ internal fun AppNavHost(
         modifier = modifier
     ) {
         composable(AppRoutes.Dashboard) {
-            val vm : DashboardViewModel = viewModel()
+            val vm : DashboardViewModel = vmFactory.injectViewModel()
             ExpenseScreen(vm)
         }
     }
 }
+
+@Composable
+inline fun <reified T : ViewModel> ViewModelProvider.Factory.injectViewModel(
+    key: String? = null,
+    factory: ViewModelProvider.Factory? = this
+): T = viewModel(modelClass = T::class.java, key = key, factory = factory)

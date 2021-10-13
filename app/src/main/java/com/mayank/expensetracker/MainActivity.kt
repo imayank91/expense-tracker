@@ -15,14 +15,19 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import com.mayank.expensetracker.internal.di.AppComponent
 import com.mayank.expensetracker.internal.navigation.AppNavHost
 import com.mayank.expensetracker.ui.dashboard.ExpenseScreen
 import com.mayank.expensetracker.ui.theme.ExpenseTrackerTheme
+import javax.inject.Inject
 
 
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var vmFactory: ViewModelProvider.Factory
 
     @ExperimentalUnitApi
     @ExperimentalAnimationApi
@@ -39,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background) {
                     //ExpenseScreen()
                     //Greeting("Android")
-                    ExpenseFlow()
+                    ExpenseFlow(vmFactory)
                 }
             }
         }
@@ -52,9 +57,9 @@ class MainActivity : ComponentActivity() {
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
-fun ExpenseFlow() {
+fun ExpenseFlow(vmFactory: ViewModelProvider.Factory) {
     val navController = rememberNavController()
-    AppNavHost(navController = navController)
+    AppNavHost(navController = navController, vmFactory = vmFactory)
 }
 
 @Composable

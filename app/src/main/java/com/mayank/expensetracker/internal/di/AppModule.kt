@@ -1,6 +1,6 @@
 package com.mayank.expensetracker.internal.di
 
-import android.app.Application
+import com.mayank.expensetracker.MainActivity
 import com.mayank.expensetracker.internal.data.local.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -11,7 +11,7 @@ internal class AppModule {
 
     @Singleton
     @Provides
-    fun provideNoteDatabase(application: Application): AppDatabase {
+    fun provideNoteDatabase(application: MainActivity): AppDatabase {
         return AppDatabase.invoke(application.applicationContext)
     }
 }
