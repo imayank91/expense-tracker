@@ -14,7 +14,7 @@ fun LocalDate.formatDate() =
 
 
 fun parseDouble(value: String?): Double {
-    return if (value == null || value.isEmpty()) Double.NaN else value.toDouble()
+    return if (value == null || value.isEmpty()) Double.NaN else "%.2f".format(value.toDouble()).toDouble()
 }
 
 @SuppressLint("SimpleDateFormat")

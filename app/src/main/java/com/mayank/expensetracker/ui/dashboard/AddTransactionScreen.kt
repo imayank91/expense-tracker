@@ -124,7 +124,14 @@ internal fun AddTransactionBody(vm: DashboardViewModel, onCancel: () -> Unit, on
             ExpenseTrackerInputText(
                 textFieldValue = amountValue,
                 onTextChanged = {
-                    amountValue = it
+                    amountValue = if (it.text.isEmpty()){
+                        it
+                    } else {
+                        when (it.text.toDoubleOrNull()) {
+                            null -> amountValue
+                            else -> it
+                        }
+                    }
                     vm.setAmount(it.text)
                 },
                 placeholder = {

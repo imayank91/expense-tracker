@@ -72,7 +72,7 @@ internal class DashboardViewModel @Inject constructor(
                     date = date,
                     formattedDate = formattedDate,
                     typeList = typeList,
-                    saveEnabled = InputValidator.isValid(title, amount, formattedDate, type))
+                    saveEnabled = InputValidator.isValid(title, amount, formattedDate, type) && parseDouble(amount) != 0.0)
             }.catch { e ->
                 e.printStackTrace()
             }.collect {
