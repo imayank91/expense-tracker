@@ -39,6 +39,7 @@ import kotlin.math.abs
 internal fun ExpenseScreen(vm: DashboardViewModel) {
     val viewState by vm.viewState.collectAsState()
     val bottomSheetScaffoldState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     var showDeleteTransaction by remember { mutableStateOf(false) }
     var selectedTransaction by remember { mutableStateOf(-1) }
@@ -49,8 +50,11 @@ internal fun ExpenseScreen(vm: DashboardViewModel) {
         sheetContent = {
             when (showDeleteTransaction) {
                 true -> DeleteTransactionScreen {
-                    scope.launch { bottomSheetScaffoldState.hide() }
                     vm.deleteTransaction(selectedTransaction)
+                    scope.launch {
+                        bottomSheetScaffoldState.hide()
+                        scaffoldState.snackbarHostState.showSnackbar("Transaction deleted successfully")
+                    }
                 }
                 false -> AddTransactionBody(
                     vm = vm,
@@ -64,7 +68,7 @@ internal fun ExpenseScreen(vm: DashboardViewModel) {
             }
         },
         content = {
-            Scaffold(
+            Scaffold(scaffoldState = scaffoldState,
                 floatingActionButton = {
                     FloatingActionButton(
                         onClick = {
@@ -127,6 +131,11 @@ internal fun ExpenseScreen(vm: DashboardViewModel) {
                                     fontWeight = FontWeight.SemiBold
                                 )
                             )
+                        }
+                    }
+                    is DashboardViewModel.DashboardScreenViewState.Error -> {
+                        LaunchedEffect(Unit) {
+                            scaffoldState.snackbarHostState.showSnackbar(state.message)
                         }
                     }
                 }

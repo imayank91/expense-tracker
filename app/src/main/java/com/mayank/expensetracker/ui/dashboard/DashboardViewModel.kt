@@ -84,7 +84,7 @@ internal class DashboardViewModel @Inject constructor(
     private fun updateLatestTransaction() {
         viewModelScope.launch {
             getTransactionsUseCase.getTransactions().catch {
-
+                _dashboardViewState.value = DashboardScreenViewState.Error("Something went wrong")
             }.collect { transaction ->
                 when {
                     transaction.isNotEmpty() -> {
